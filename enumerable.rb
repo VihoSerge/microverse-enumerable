@@ -1,12 +1,14 @@
 module Enumerable
   def my_each
-    for i in 0...self.length
+    for i in 0...size
       yield(self[i])
     end
   end
 
   def my_each_with_index
-
+    for i in 0...size
+      yield(self[i], i)
+    end
   end
 
   def my_select
@@ -36,10 +38,4 @@ module Enumerable
   def my_inject
 
   end
-end
-
-arr = [1, 3]
-
-arr.my_each do | i |
-  puts i
 end
