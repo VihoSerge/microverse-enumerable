@@ -12,7 +12,12 @@ module Enumerable
   end
 
   def my_select
+    arr = []
+    self.my_each do |i|
+      arr << i if yield(i)
+    end
 
+    arr
   end
 
   def my_all?
@@ -39,3 +44,11 @@ module Enumerable
 
   end
 end
+
+arr = [1, 3]
+# puts arr.my_each
+# arr.my_each_with_index do |val,i|
+#   puts val, i
+# end
+
+puts [1,2,3,4,5,6].my_select { |num| num.even?  }
