@@ -37,7 +37,12 @@ module Enumerable
   end
 
   def my_map
+    arr = []
+    self.my_each do |i|
+      arr << yield(i)
+    end
 
+    arr
   end
 
   def my_inject
@@ -51,4 +56,6 @@ arr = [1, 3]
 #   puts val, i
 # end
 
-puts [1,2,3,4,5,6].my_select { |num| num.even?  }
+# puts [1,2,3,4,5,6].my_select { |num| num.even?  }
+
+puts [1, 3].my_map { |i| i*i }
