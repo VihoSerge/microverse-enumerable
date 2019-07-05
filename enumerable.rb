@@ -1,7 +1,7 @@
 module Enumerable
   def my_each
-    for i in 0...size
-      yield(self[i])
+    for i in self
+      yield(i)
     end
   end
 
@@ -13,10 +13,7 @@ module Enumerable
 
   def my_select
     arr = []
-    self.my_each do |i|
-      arr << i if yield(i)
-    end
-
+    self.my_each { |i| arr << i if yield(i) }
     arr
   end
 
@@ -48,42 +45,53 @@ module Enumerable
     true
   end
 
-  def my_count
+  def my_count val = nil
+    return size if val.nil? && !block_given?
 
-  end
+    if val
+      count = 0
+      for i in 0...size
+        count += 1 if val == self[i]
+      end
 
-  def my_map
-    arr = []
-    self.my_each do |i|
-      arr << yield(i)
+      return count
     end
 
-    arr
+    count = 0
+    for i in 0...size
+      count += 1 if yield(self[i])
+    end
+
+    return count
   end
 
-  def my_inject
+  def my_map proc=nil
+    result = []
+    if proc
+      self.my_each { |i| result << proc.call(i) }
+    else
+      self.my_each { |i| result << yield(i) }
+    end
+    result
+  end
 
+  def my_inject arg = nil
+    return nil if !block_given?
+
+    if !arg.nil?
+      result = arg
+      x = 0
+    else
+      result = self[0]
+      x = 1
+    end
+
+    self[x..-1].my_each { |i| result = yield(result, i) }
+
+    result
   end
 end
 
-arr = [1, 3]
-# puts arr.my_each
-# arr.my_each_with_index do |val,i|
-#   puts val, i
-# end
-
-# puts [1,2,3,4,5,6].my_select { |num| num.even?  }
-
-# puts [1, 3].my_map { |i| i*i }
-
-# puts [nil, true, 99].all?
-# puts [nil, true, 99].my_all?
-# puts [].my_all?(2, 34)
-
-# puts %w[ant bear cat].my_any? { |word| word.length >= 3 } #=> true
-# puts %w[ant bear cat].my_any? { |word| word.length >= 4 } #=> false
-#                      #=> true
-# puts [nil, true, 99].my_any?                              #=> false
-# puts [].my_any?
-
-puts %w[ant beass cat].my_none? { |word| word.length > 4 } #=> false
+def multiply_els arg
+  arg.my_inject { |product, n| product * n }
+end
