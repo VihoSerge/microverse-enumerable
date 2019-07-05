@@ -39,7 +39,13 @@ module Enumerable
   end
 
   def my_none?
+    return true if !block_given?
 
+    self.my_each do |i|
+      return false if yield(i)
+    end
+
+    true
   end
 
   def my_count
@@ -74,8 +80,10 @@ arr = [1, 3]
 # puts [nil, true, 99].my_all?
 # puts [].my_all?(2, 34)
 
-puts %w[ant bear cat].my_any? { |word| word.length >= 3 } #=> true
-puts %w[ant bear cat].my_any? { |word| word.length >= 4 } #=> false
-                     #=> true
-puts [nil, true, 99].my_any?                              #=> false
-puts [].my_any?
+# puts %w[ant bear cat].my_any? { |word| word.length >= 3 } #=> true
+# puts %w[ant bear cat].my_any? { |word| word.length >= 4 } #=> false
+#                      #=> true
+# puts [nil, true, 99].my_any?                              #=> false
+# puts [].my_any?
+
+puts %w[ant beass cat].my_none? { |word| word.length > 4 } #=> false
