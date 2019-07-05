@@ -21,7 +21,12 @@ module Enumerable
   end
 
   def my_all?
+    self.my_each do |i|
+      block = yield(i) if block_given?
+      return false if i.nil? || !i || !block
+    end
 
+    true
   end
 
   def my_any?
@@ -37,25 +42,10 @@ module Enumerable
   end
 
   def my_map
-    arr = []
-    self.my_each do |i|
-      arr << yield(i)
-    end
 
-    arr
   end
 
   def my_inject
 
   end
 end
-
-arr = [1, 3]
-# puts arr.my_each
-# arr.my_each_with_index do |val,i|
-#   puts val, i
-# end
-
-# puts [1,2,3,4,5,6].my_select { |num| num.even?  }
-
-puts [1, 3].my_map { |i| i*i }
